@@ -3,9 +3,9 @@
 </div>
 <br />
 <div>
-	<a href='mxit://[communityportal]/RecommendPage?ItemId=10429026' type="mxit/service-navigation">Please share this app! :-)</a> | More Mxit: <%= @mixup_ad %>
+	<a href="mxit://[communityportal]/RecommendPage?ItemId=<%= ENV['MXIT_APP_REFERRAL_ID'] %>" type="mxit/service-navigation">Please share this app! :-)</a> | More Mxit: <%= @mixup_ad %>
 </div>
 <br />
 <div>
-	<mxit:advert auid="415098"/>
+	<mxit:advert auid=<%= ENV['MXIT_APP_AUID'] %> />
 </div>	
