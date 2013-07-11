@@ -1,17 +1,15 @@
 require 'sinatra'
 require 'dotenv'
 require 'nestful'
-require 'data_mapper'
 require 'open-uri'
+require 'firebase'
 require_relative 'lib/robotar.rb'
 
 enable :sessions
 
 configure do
 	Dotenv.load if settings.development?
-	DataMapper.setup(:default, ENV['DATABASE_URL'])
-	DataMapper.finalize
-	DataMapper.auto_upgrade!
+	Firebase.base_uri = "https://glio-mxit-users.firebaseio.com/#{ENV['MXIT_APP_NAME']}/"
 end
 
 before do
@@ -42,11 +40,12 @@ end
 helpers do
 	def get_user
 		mxit_user = MxitUser.new(request.env)
-		User.first(:mxit_user_id => mxit_user.user_id)
+		data = Firebase.get(mxit_user.user_id).response.body
+		data == "null" ? nil : data
 	end
 	def create_user
 		mxit_user = MxitUser.new(request.env)
-		User.create(:mxit_user_id => mxit_user.user_id, :date_joined => Time.now)
+		Firebase.set(mxit_user.user_id, {:date_joined => Time.now})
 	end
 	def protected!
 	    unless authorized?
@@ -58,4 +57,9 @@ helpers do
 	    @auth ||=  Rack::Auth::Basic::Request.new(request.env)
 	    @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == ['admin', ENV['USER_SECRET']]
   	end
+end
+
+get '/users.json' do
+	content_type :json
+	Firebase.get('').response.body
 end
