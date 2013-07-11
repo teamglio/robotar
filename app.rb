@@ -15,7 +15,7 @@ configure do
 end
 
 before do
-	@mixup_ad = Nestful.get("http://serve.mixup.hapnic.com/#{ENV['MXIT_APP_REFERRAL_ID']}").body
+	@mixup_ad = Nestful.get("http://serve.mixup.hapnic.com/#{ENV['MXIT_APP_NAME']}").body
 end
 
 get '/' do
