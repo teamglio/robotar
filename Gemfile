@@ -4,3 +4,4 @@ gem 'sinatra'
 gem 'nestful'
 gem 'firebase'
 gem 'dotenv'
+gem 'rest-client' #for mxit_api.rb
