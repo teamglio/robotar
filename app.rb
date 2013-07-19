@@ -3,6 +3,7 @@ require 'dotenv'
 require 'nestful'
 require 'open-uri'
 require 'firebase'
+require 'stathat'
 require_relative 'lib/robotar.rb'
 
 enable :sessions
@@ -20,6 +21,7 @@ get '/' do
 	create_user unless get_user
 	session[:robotar] = nil
 	session[:robotar] = "http://robohash.org/#{(0...50).map{ ('a'..'z').to_a[rand(26)] }.join}.png"
+	StatHat::API.ez_post_count('robotar - robotars requested', 'emile@silvis.co.za', 1)	
 	erb :home
 end
 
